@@ -1,0 +1,37 @@
+.form {
+  display: block;
+  margin: 32px auto;
+}
+
+.form input {
+  outline: none;
+  border: 1px solid #808080;
+  border-radius: 4px;
+  width: 272px;
+  /* height: 40px; */
+  padding: 6px 16px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #808080;
+}
+
+.form input:focus {
+  border-radius: 4px;
+  border: 1px solid #4e75ff;
+}
+
+.form input:hover {
+  border: 1px solid #000;
+}
+
+.form button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  width: 91px;
+  height: 40px;
+  background: #4e75ff;
+  color: white;
+}
