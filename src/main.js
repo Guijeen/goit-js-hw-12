@@ -4,19 +4,25 @@ import {
   clearGallery,
   showLoader,
   hideLoader,
+  alertMessege,
+  galleryList
 } from './js/render-functions';
 
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
+
 
 const form = document.querySelector('.form');
+let searchText = null
+let page = 1
+const moreBtn = document.querySelector("#moreBtn")
+
 hideLoader();
 
 form.addEventListener('submit', handlerGallery);
 
+
 function handlerGallery(event) {
   event.preventDefault();
-  const searchText = event.target.elements['search-text'].value.trim();
+ searchText = event.target.elements['search-text'].value.trim();
 
   clearGallery();
 
@@ -26,20 +32,25 @@ function handlerGallery(event) {
     return;
   }
 
-  showLoader();
-  getImagesByQuery(searchText)
+  showLoader();  
+  getImagesByQuery(searchText, page)
     .then(data => {
-      if (data.length <= 0) {
+      
+      if (data.hits.length <= 0) {
         alertMessege(
           `Sorry, there are no images matching your search query. Please try again!`
         );
         return;
-      }
-      createGallery(data);
+      }    
+      galleryList.innerHTML =""  
+      createGallery(data.hits, page);
+      page++
+      moreBtn.classList.remove("hidden")
     })
     .catch(error => {
-      console.log(error);
       alertMessege(error.message);
+      console.log(error.message);
+      
     })
     .finally(() => {
       hideLoader();
@@ -47,9 +58,25 @@ function handlerGallery(event) {
     });
 }
 
-function alertMessege(message) {
-  iziToast.error({
-    message: message,
-    position: 'topLeft',
-  });
+
+
+moreBtn.addEventListener("click", handlerLoadMore)
+
+function handlerLoadMore(event) {
+  
+   getImagesByQuery(searchText, page)
+    .then(data => {
+      createGallery(data.hits);
+      page++
+    })
+    .catch(error => {
+      alertMessege(error.message);
+      console.log(error.message);
+      
+    })
+    .finally(() => {
+      hideLoader();
+    });
+  
 }
+

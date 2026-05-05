@@ -1,6 +1,9 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
 const galleryList = document.querySelector('.gallery');
 let galleryViewer = new SimpleLightbox('.gallery-card a', {
   captionsData: 'alt',
@@ -8,7 +11,7 @@ let galleryViewer = new SimpleLightbox('.gallery-card a', {
 });
 
 function createGallery(images) {
-  galleryList.innerHTML = images
+  galleryList.insertAdjacentHTML("beforeend", images
     .map(
       ({
         webformatURL,
@@ -40,7 +43,7 @@ function createGallery(images) {
         </li>`;
       }
     )
-    .join('');
+    .join(''));
 
   galleryViewer.refresh();
 }
@@ -59,4 +62,11 @@ function hideLoader() {
   loader.classList.remove('loader');
 }
 
-export { createGallery, clearGallery, showLoader, hideLoader };
+function alertMessege(message) {
+  iziToast.error({
+    message: message,
+    position: 'topLeft',
+  });
+}
+
+export { createGallery, clearGallery, showLoader, hideLoader, alertMessege,galleryList };
