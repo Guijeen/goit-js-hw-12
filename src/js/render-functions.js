@@ -10,6 +10,8 @@ let galleryViewer = new SimpleLightbox('.gallery-card a', {
   captionDelay: 250,
 });
 
+
+
 function createGallery(images) {
   galleryList.insertAdjacentHTML("beforeend", images
     .map(
@@ -61,6 +63,8 @@ function showLoader() {
 function hideLoader() {
   loader.classList.remove('loader');
 }
+
+hideLoader();
 
 function alertMessege(message) {
   iziToast.error({

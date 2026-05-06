@@ -12,9 +12,7 @@ export default async function getImagesByQuery(query, page) {
   };
 
   axios.defaults.baseURL = `https://pixabay.com/api/`;
-  console.log(axios.get(``, { params }));
 
-  const resData = (await axios.get(``, { params })).data;
-  console.log(resData.totalHits);
-  return resData
+  return (await axios.get(``, { params })).data;
+   
 }
