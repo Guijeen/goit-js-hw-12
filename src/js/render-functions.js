@@ -73,4 +73,15 @@ function alertMessege(message) {
   });
 }
 
-export { createGallery, clearGallery, showLoader, hideLoader, alertMessege,galleryList };
+const moreBtn = document.querySelector('#moreBtn');
+
+function showLoadMoreButton() {
+  moreBtn.classList.remove('hidden');
+}
+
+function hideLoadMoreButton() {
+  moreBtn.classList.add('hidden');
+}
+
+
+export { createGallery, clearGallery, showLoader, hideLoader, alertMessege,galleryList,showLoadMoreButton, hideLoadMoreButton };

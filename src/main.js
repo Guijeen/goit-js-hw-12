@@ -6,12 +6,14 @@ import {
   hideLoader,
   alertMessege,
   galleryList,
+  showLoadMoreButton,
+  hideLoadMoreButton,
 } from './js/render-functions';
 
 const form = document.querySelector('.form');
 let searchText = null;
 let page = 1;
-const moreBtn = document.querySelector('#moreBtn');
+
 let qountImages = 0;
 
 form.addEventListener('submit', handlerGallery);
@@ -19,7 +21,7 @@ form.addEventListener('submit', handlerGallery);
 function handlerGallery(event) {
   event.preventDefault();
   searchText = event.target.elements['search-text'].value.trim();
-  moreBtn.classList.add('hidden');
+  hideLoadMoreButton()
   clearGallery();
   page = 1;
 
@@ -42,15 +44,14 @@ function handlerGallery(event) {
       createGallery(data.hits, page);
       qountImages += data.hits.length;
       page++;
-      
 
       if (data.totalHits <= qountImages) {
-        moreBtn.classList.add('hidden');
+        hideLoadMoreButton()
         alertMessege(
           "We're sorry, but you've reached the end of search results."
         );
-      }else{
-        moreBtn.classList.remove('hidden');
+      } else {
+        showLoadMoreButton()
       }
     })
     .catch(error => {
@@ -81,7 +82,7 @@ function handlerLoadMore(event) {
       });
 
       if (data.totalHits <= qountImages) {
-        moreBtn.classList.add('hidden');
+        hideLoadMoreButton()
         alertMessege(
           "We're sorry, but you've reached the end of search results."
         );
