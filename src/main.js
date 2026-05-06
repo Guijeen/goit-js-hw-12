@@ -5,7 +5,6 @@ import {
   showLoader,
   hideLoader,
   alertMessege,
-  galleryList,
   showLoadMoreButton,
   hideLoadMoreButton,
   moreBtn,
@@ -15,7 +14,7 @@ const form = document.querySelector('.form');
 let searchText = null;
 let page = 1;
 
-let qountImages = 0;
+let qountImages=0
 
 form.addEventListener('submit', handlerGallery);
 
@@ -25,6 +24,7 @@ async function handlerGallery(event) {
   hideLoadMoreButton();
   clearGallery();
   page = 1;
+  qountImages = 0;
 
   if (searchText === '') {
     alertMessege(`field is empty`);
@@ -41,7 +41,6 @@ async function handlerGallery(event) {
       );
       return;
     }
-    galleryList.innerHTML = '';
     createGallery(data.hits, page);
     qountImages += data.hits.length;
     page++;
@@ -66,6 +65,8 @@ async function handlerGallery(event) {
 moreBtn.addEventListener('click', handlerLoadMore);
 
 async function handlerLoadMore(event) {
+  showLoader();
+  hideLoadMoreButton();
   try {
     const data = await getImagesByQuery(searchText, page);
 
@@ -77,15 +78,16 @@ async function handlerLoadMore(event) {
     const galleryCardHeight = galleryCard.getBoundingClientRect().height;
     window.scrollBy({
       left: 0,
-      top: galleryCardHeight,
+      top: galleryCardHeight * 2,
       behavior: 'smooth',
     });
 
     if (data.totalHits <= qountImages) {
-      hideLoadMoreButton();
       alertMessege(
         "We're sorry, but you've reached the end of search results."
       );
+    } else {
+      showLoadMoreButton();
     }
   } catch (error) {
     alertMessege(error.message);

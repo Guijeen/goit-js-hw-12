@@ -10,21 +10,21 @@ let galleryViewer = new SimpleLightbox('.gallery-card a', {
   captionDelay: 250,
 });
 
-
-
 function createGallery(images) {
-  galleryList.insertAdjacentHTML("beforeend", images
-    .map(
-      ({
-        webformatURL,
-        largeImageURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) => {
-        return `<li class="gallery-card">
+  galleryList.insertAdjacentHTML(
+    'beforeend',
+    images
+      .map(
+        ({
+          webformatURL,
+          largeImageURL,
+          tags,
+          likes,
+          views,
+          comments,
+          downloads,
+        }) => {
+          return `<li class="gallery-card">
         <a href=${largeImageURL}>
             <img class="gallery-image" src=${webformatURL} alt=${tags} width="360"/>
         </a>
@@ -43,9 +43,10 @@ function createGallery(images) {
             </li>
         </ul>
         </li>`;
-      }
-    )
-    .join(''));
+        }
+      )
+      .join('')
+  );
 
   galleryViewer.refresh();
 }
@@ -83,5 +84,13 @@ function hideLoadMoreButton() {
   moreBtn.classList.add('hidden');
 }
 
-
-export { createGallery, clearGallery, showLoader, hideLoader, alertMessege,galleryList,showLoadMoreButton, hideLoadMoreButton, moreBtn };
+export {
+  createGallery,
+  clearGallery,
+  showLoader,
+  hideLoader,
+  alertMessege,
+  showLoadMoreButton,
+  hideLoadMoreButton,
+  moreBtn
+};
