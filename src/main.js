@@ -8,6 +8,7 @@ import {
   galleryList,
   showLoadMoreButton,
   hideLoadMoreButton,
+  moreBtn,
 } from './js/render-functions';
 
 const form = document.querySelector('.form');
@@ -18,10 +19,10 @@ let qountImages = 0;
 
 form.addEventListener('submit', handlerGallery);
 
-function handlerGallery(event) {
+async function handlerGallery(event) {
   event.preventDefault();
   searchText = event.target.elements['search-text'].value.trim();
-  hideLoadMoreButton()
+  hideLoadMoreButton();
   clearGallery();
   page = 1;
 
@@ -32,67 +33,64 @@ function handlerGallery(event) {
   }
 
   showLoader();
-  getImagesByQuery(searchText, page)
-    .then(data => {
-      if (data.hits.length <= 0) {
-        alertMessege(
-          `Sorry, there are no images matching your search query. Please try again!`
-        );
-        return;
-      }
-      galleryList.innerHTML = '';
-      createGallery(data.hits, page);
-      qountImages += data.hits.length;
-      page++;
+  try {
+    const data = await getImagesByQuery(searchText, page);
+    if (data.hits.length <= 0) {
+      alertMessege(
+        `Sorry, there are no images matching your search query. Please try again!`
+      );
+      return;
+    }
+    galleryList.innerHTML = '';
+    createGallery(data.hits, page);
+    qountImages += data.hits.length;
+    page++;
 
-      if (data.totalHits <= qountImages) {
-        hideLoadMoreButton()
-        alertMessege(
-          "We're sorry, but you've reached the end of search results."
-        );
-      } else {
-        showLoadMoreButton()
-      }
-    })
-    .catch(error => {
-      alertMessege(error.message);
-      console.log(error.message);
-    })
-    .finally(() => {
-      hideLoader();
-      event.target.reset();
-    });
+    if (data.totalHits <= qountImages) {
+      hideLoadMoreButton();
+      alertMessege(
+        "We're sorry, but you've reached the end of search results."
+      );
+    } else {
+      showLoadMoreButton();
+    }
+  } catch (error) {
+    alertMessege(error.message);
+    console.log(error.message);
+  } finally {
+    hideLoader();
+    event.target.reset();
+  }
 }
 
 moreBtn.addEventListener('click', handlerLoadMore);
 
-function handlerLoadMore(event) {
-  getImagesByQuery(searchText, page)
-    .then(data => {
-      createGallery(data.hits);
-      page++;
-      qountImages += data.hits.length;
+async function handlerLoadMore(event) {
+  try {
+    const data = await getImagesByQuery(searchText, page);
 
-      const galleryCard = document.querySelector('.gallery-card');
-      const galleryCardHeight = galleryCard.getBoundingClientRect().height;
-      window.scrollBy({
-        left: 0,
-        top: galleryCardHeight,
-        behavior: 'smooth',
-      });
+    createGallery(data.hits);
+    page++;
+    qountImages += data.hits.length;
 
-      if (data.totalHits <= qountImages) {
-        hideLoadMoreButton()
-        alertMessege(
-          "We're sorry, but you've reached the end of search results."
-        );
-      }
-    })
-    .catch(error => {
-      alertMessege(error.message);
-      console.log(error.message);
-    })
-    .finally(() => {
-      hideLoader();
+    const galleryCard = document.querySelector('.gallery-card');
+    const galleryCardHeight = galleryCard.getBoundingClientRect().height;
+    window.scrollBy({
+      left: 0,
+      top: galleryCardHeight,
+      behavior: 'smooth',
     });
+
+    if (data.totalHits <= qountImages) {
+      hideLoadMoreButton();
+      alertMessege(
+        "We're sorry, but you've reached the end of search results."
+      );
+    }
+  } catch (error) {
+    alertMessege(error.message);
+    console.log(error.message);
+  } finally {
+    hideLoader();
+  }
 }

@@ -84,4 +84,4 @@ function hideLoadMoreButton() {
 }
 
 
-export { createGallery, clearGallery, showLoader, hideLoader, alertMessege,galleryList,showLoadMoreButton, hideLoadMoreButton };
+export { createGallery, clearGallery, showLoader, hideLoader, alertMessege,galleryList,showLoadMoreButton, hideLoadMoreButton, moreBtn };
